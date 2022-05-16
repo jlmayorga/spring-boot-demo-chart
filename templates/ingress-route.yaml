@@ -1,0 +1,17 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "spring-boot-demo-chart.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ $fullName }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: "Host(`{{ .Values.ingress.host }}.jlmayorga.xyz`)"
+    kind: Rule
+    services:
+    - name: {{ $fullName }}
+      port: {{ $svcPort }}
+{{- end }}
